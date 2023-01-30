@@ -1,17 +1,37 @@
+import ballerinax/trigger.github;
 import ballerina/http;
 
-# A service representing a network-accessible API
-# bound to port `9090`.
-service / on new http:Listener(9090) {
+configurable github:ListenerConfig config = ?;
 
-    # A resource for generating greetings
-    # + name - the input string name
-    # + return - string name with hello message or error
-    resource function get greeting(string name) returns string|error {
-        // Send a response back to the caller.
-        if name is "" {
-            return error("name should not be empty!");
-        }
-        return "Hello, " + name;
+configurable string toEmail = ?;
+listener http:Listener httpListener = new (8090);
+listener github:Listener webhookListener = new (config, httpListener);
+
+service github:IssuesService on webhookListener {
+
+    remote function onOpened(github:IssuesEvent payload) returns error? {
+        //Not Implemented
+    }
+    remote function onClosed(github:IssuesEvent payload) returns error? {
+        //Not Implemented
+    }
+    remote function onReopened(github:IssuesEvent payload) returns error? {
+        //Not Implemented
+    }
+    remote function onAssigned(github:IssuesEvent payload) returns error? {
+        //Not Implemented
+    }
+    remote function onUnassigned(github:IssuesEvent payload) returns error? {
+        //Not Implemented
+    }
+    remote function onLabeled(github:IssuesEvent payload) returns error? {
+        //Not Implemented
+    }
+    remote function onUnlabeled(github:IssuesEvent payload) returns error? {
+        //Not Implemented
     }
 }
+
+service /ignore on httpListener {
+}
+
